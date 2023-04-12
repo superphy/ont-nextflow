@@ -14,10 +14,18 @@ params.move = false     // whether or not the original files have to be moved fr
 params.datadir = "/mnt/NAS/nanopore_runs/"              // location of the raw/original run files
 params.outdir = "$HOME/jantest/method1/"                // location to collect all output/results
 params.publishdir = "${params.outdir}${params.target}/"  // location to save files for the current target
+params.length_chopper = 1   // default value of the minimum read length to filter out in chopper
+params.qcscore_chopper = 0  // default value of the minimum qcscore to filter out in chopper
+val(datadir)
+        val(publishdir)
+        val(target)
+        val(length)
+        val(qcscore)
 
 // Subworkflows
 include { MOVEFILES } from './subworkflow/movefiles'
 include { CONCAT_RAW_FASTQ } from './subworkflow/concat_raw_fastq'
+include { FILTERING } from './subworkflow/filtering'
 
 
 workflow {
@@ -30,5 +38,5 @@ workflow {
     else {
         CONCAT_RAW_FASTQ(params.datadir, params.target, params.publishdir)
     }
-
+    FILTERING (params.datadir,params.target,params.length_chopper,params.qcscore_chopper
 }
