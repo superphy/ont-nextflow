@@ -1,5 +1,10 @@
 #!/usr/bin/env nextflow
 
+/*
+example usage:
+nextflow run method1.nf --target examplerun --move true
+*/
+
 nextflow.enable.dsl = 2
 
 
@@ -19,7 +24,7 @@ workflow {
     // If required, move the original output from the MinIONs to the NAS
     // Concatenate all of the passed fastq files into one
     if (params.move == true) {
-        MOVEFILES(params.datadir, params.target) | view
+        MOVEFILES(params.datadir, params.target)
         CONCAT_RAW_FASTQ(MOVEFILES.out, params.publishdir)
     }
     else {
